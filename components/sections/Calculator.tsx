@@ -1,126 +1,195 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-const TERMS = [6, 12, 24, 36, 48, 60]
-const ANNUAL_RATE = 0.03
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+const fmt = new Intl.NumberFormat('en-EU', {
+  style: 'currency',
+  currency: 'EUR',
+  maximumFractionDigits: 0,
+})
 
 function formatEur(value: number): string {
-  return new Intl.NumberFormat('en-EU', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(value)
+  return fmt.format(value)
 }
 
-interface DonutProps {
+// ─── Donut Chart ─────────────────────────────────────────────────────────────
+
+interface DonutChartProps {
   principalPct: number
 }
 
-function Donut({ principalPct }: DonutProps) {
-  const R = 56
-  const cx = 72
-  const cy = 72
+function DonutChart({ principalPct }: DonutChartProps) {
+  const R = 60
+  const cx = 80
+  const cy = 80
   const circumference = 2 * Math.PI * R
   const principalArc = (principalPct / 100) * circumference
-  const gap = 2
+  const interestArc = circumference - principalArc
+  const interestPct = 100 - principalPct
 
   return (
-    <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
-      {/* Track */}
-      <circle cx={cx} cy={cy} r={R} fill="none" stroke="#1f2937" strokeWidth={14} />
-      {/* Interest arc (gray, full) */}
-      <circle
-        cx={cx} cy={cy} r={R}
-        fill="none"
-        stroke="#374151"
-        strokeWidth={14}
-        strokeDasharray={`${circumference - principalArc - gap} ${principalArc + gap}`}
-        strokeDashoffset={-(principalArc + gap / 2)}
-        strokeLinecap="round"
-        style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-      />
-      {/* Principal arc (indigo) */}
-      <circle
-        cx={cx} cy={cy} r={R}
-        fill="none"
-        stroke="#6366f1"
-        strokeWidth={14}
-        strokeDasharray={`${principalArc - gap} ${circumference - principalArc + gap}`}
-        strokeLinecap="round"
-        style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-      />
-      {/* Center label */}
-      <text x={cx} y={cy - 6} textAnchor="middle" fill="#ffffff" fontSize={18} fontWeight={700}>
-        {principalPct.toFixed(1)}%
-      </text>
-      <text x={cx} y={cy + 14} textAnchor="middle" fill="#6b7280" fontSize={11}>
-        Principal
-      </text>
-    </svg>
+    <div className="flex flex-col items-center gap-4">
+      <div className="relative">
+        <svg
+          width="160"
+          height="160"
+          viewBox="0 0 160 160"
+          aria-label={`Donut chart: ${principalPct.toFixed(1)}% principal, ${interestPct.toFixed(1)}% interest`}
+          role="img"
+        >
+          {/* Background track */}
+          <circle
+            cx={cx}
+            cy={cy}
+            r={R}
+            fill="none"
+            stroke="#1a2035"
+            strokeWidth={16}
+          />
+          {/* Interest arc (gray) */}
+          <circle
+            cx={cx}
+            cy={cy}
+            r={R}
+            fill="none"
+            stroke="#374151"
+            strokeWidth={16}
+            strokeDasharray={`${interestArc} ${principalArc}`}
+            strokeDashoffset={-principalArc}
+            strokeLinecap="round"
+            style={{ transform: 'rotate(-90deg)', transformOrigin: `${cx}px ${cy}px` }}
+          />
+          {/* Principal arc (indigo) */}
+          <circle
+            cx={cx}
+            cy={cy}
+            r={R}
+            fill="none"
+            stroke="#6366f1"
+            strokeWidth={16}
+            strokeDasharray={`${principalArc} ${interestArc}`}
+            strokeDashoffset={0}
+            strokeLinecap="round"
+            style={{ transform: 'rotate(-90deg)', transformOrigin: `${cx}px ${cy}px` }}
+          />
+          {/* Center label */}
+          <text
+            x={cx}
+            y={cy - 6}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="white"
+            fontSize="16"
+            fontWeight="700"
+          >
+            {principalPct.toFixed(1)}%
+          </text>
+          <text
+            x={cx}
+            y={cy + 12}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill="#6b7280"
+            fontSize="10"
+          >
+            principal
+          </text>
+        </svg>
+      </div>
+
+      {/* Legend */}
+      <div className="flex gap-6 text-sm">
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-indigo-500 inline-block" />
+          <span className="text-gray-300">Principal</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />
+          <span className="text-gray-300">Interest {interestPct.toFixed(1)}%</span>
+        </div>
+      </div>
+    </div>
   )
 }
 
+// ─── Main Component ──────────────────────────────────────────────────────────
+
+const TERM_OPTIONS = [6, 12, 24, 36, 48, 60] as const
+type Term = (typeof TERM_OPTIONS)[number]
+
 export default function Calculator() {
   const [amount, setAmount] = useState(15000)
-  const [term, setTerm] = useState(24)
-  const prefersReducedMotion = useReducedMotion()
+  const [term, setTerm] = useState<Term>(24)
 
   const calc = useMemo(() => {
-    const r = ANNUAL_RATE / 12
+    const rate = 0.03 / 12 // 3% annual, monthly
     const n = term
-    const monthly = r === 0
-      ? amount / n
-      : amount * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1)
+    const principal = amount
+
+    let monthly: number
+    if (rate === 0) {
+      monthly = principal / n
+    } else {
+      const factor = Math.pow(1 + rate, n)
+      monthly = (principal * rate * factor) / (factor - 1)
+    }
+
     const totalRepayment = monthly * n
-    const totalInterest = totalRepayment - amount
-    const principalPct = (amount / totalRepayment) * 100
+    const totalInterest = totalRepayment - principal
+    const principalPct = (principal / totalRepayment) * 100
+
     return { monthly, totalRepayment, totalInterest, principalPct }
   }, [amount, term])
 
-  const sliderPct = ((amount - 1000) / (50000 - 1000)) * 100
+  const containerVariants = {
+    hidden: { opacity: 0, y: 32 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+  }
 
   return (
-    <section id="calculator" className="bg-[#0a0e1a] py-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.55 }}
-          className="flex flex-col items-center text-center gap-4 mb-12"
-        >
-          <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
+    <section className="bg-[#0a0e1a] py-20" id="calculator">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header */}
+        <div className="text-center mb-12">
+          <p className="text-indigo-400 text-xs font-semibold tracking-widest uppercase mb-3">
             LOAN CALCULATOR
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Calculate your loan
           </h2>
-          <p className="text-gray-400 text-lg max-w-xl">
+          <p className="text-gray-400 max-w-xl mx-auto">
             See exactly what you&apos;ll pay — no surprises, no hidden charges.
           </p>
-        </motion.div>
+        </div>
 
+        {/* Card */}
         <motion.div
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 32 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
-          className="max-w-5xl mx-auto bg-[#0d1117] border border-white/[0.08] rounded-3xl p-8 md:p-12"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          className="bg-[#0d1117] border border-white/[0.08] rounded-3xl p-8 md:p-12"
         >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Left — inputs */}
+            {/* ── Left: Inputs ── */}
             <div className="flex flex-col gap-8">
-              {/* Amount slider */}
-              <div className="flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="loan-amount" className="text-gray-400 text-sm font-medium">
+              {/* Loan Amount */}
+              <div>
+                <div className="flex justify-between items-baseline mb-3">
+                  <label
+                    htmlFor="loan-amount"
+                    className="text-gray-400 text-sm font-medium"
+                  >
                     Loan Amount
                   </label>
-                  <span className="text-white font-bold text-lg">{formatEur(amount)}</span>
+                  <span className="text-white text-2xl font-bold">
+                    {formatEur(amount)}
+                  </span>
                 </div>
+
                 <input
                   id="loan-amount"
                   type="range"
@@ -129,30 +198,41 @@ export default function Calculator() {
                   step={500}
                   value={amount}
                   onChange={(e) => setAmount(Number(e.target.value))}
-                  className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
-                  style={{
-                    background: `linear-gradient(to right, #6366f1 ${sliderPct}%, #1f2937 ${sliderPct}%)`,
-                  }}
-                  aria-valuetext={formatEur(amount)}
+                  className="w-full h-2 rounded-full appearance-none cursor-pointer
+                    bg-gradient-to-r from-indigo-600 to-indigo-400
+                    [&::-webkit-slider-thumb]:appearance-none
+                    [&::-webkit-slider-thumb]:w-5
+                    [&::-webkit-slider-thumb]:h-5
+                    [&::-webkit-slider-thumb]:rounded-full
+                    [&::-webkit-slider-thumb]:bg-white
+                    [&::-webkit-slider-thumb]:shadow-lg
+                    [&::-webkit-slider-thumb]:cursor-pointer
+                    [&::-moz-range-thumb]:w-5
+                    [&::-moz-range-thumb]:h-5
+                    [&::-moz-range-thumb]:rounded-full
+                    [&::-moz-range-thumb]:bg-white
+                    [&::-moz-range-thumb]:border-0
+                    [&::-moz-range-thumb]:cursor-pointer"
                 />
-                <div className="flex justify-between text-gray-500 text-xs">
+
+                <div className="flex justify-between text-xs text-gray-500 mt-2">
                   <span>€1,000</span>
                   <span>€50,000</span>
                 </div>
               </div>
 
-              {/* Term buttons */}
-              <div className="flex flex-col gap-3">
-                <span className="text-gray-400 text-sm font-medium">Loan Period</span>
+              {/* Loan Period */}
+              <div>
+                <p className="text-gray-400 text-sm font-medium mb-3">Loan Period</p>
                 <div className="flex flex-wrap gap-2">
-                  {TERMS.map((t) => (
+                  {TERM_OPTIONS.map((t) => (
                     <button
                       key={t}
                       onClick={() => setTerm(t)}
-                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         term === t
                           ? 'bg-indigo-600 text-white'
-                          : 'bg-[#1a2035] text-gray-400 hover:text-white hover:bg-[#1f2847]'
+                          : 'bg-[#1a2035] text-gray-400 hover:text-white'
                       }`}
                     >
                       {t}m
@@ -161,73 +241,41 @@ export default function Calculator() {
                 </div>
               </div>
 
-              {/* Breakdown */}
-              <div className="flex flex-col gap-0 rounded-xl overflow-hidden border border-white/[0.06]">
+              {/* Breakdown Table */}
+              <div className="border-t border-white/[0.08] pt-6 flex flex-col gap-3">
                 {[
                   { label: 'Principal Amount', value: formatEur(amount) },
-                  { label: 'Interest Rate', value: `${(ANNUAL_RATE * 100).toFixed(2)}%` },
+                  { label: 'Interest Rate', value: '3.00%' },
                   { label: 'Total Interest', value: formatEur(calc.totalInterest) },
                   { label: 'Total Repayment', value: formatEur(calc.totalRepayment) },
-                ].map((row, i) => (
-                  <div
-                    key={row.label}
-                    className={`flex items-center justify-between px-5 py-3 ${
-                      i < 3 ? 'border-b border-white/[0.06]' : ''
-                    } ${i === 3 ? 'bg-white/[0.03]' : ''}`}
-                  >
-                    <span className="text-gray-400 text-sm">{row.label}</span>
-                    <motion.span
-                      key={row.value}
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.18 }}
-                      className={`font-semibold text-sm ${i === 3 ? 'text-white' : 'text-gray-200'}`}
-                    >
-                      {row.value}
-                    </motion.span>
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between">
+                    <span className="text-gray-400 text-sm">{label}</span>
+                    <span className="text-white text-sm font-medium">{value}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Right — result */}
-            <div className="flex flex-col items-center justify-center gap-8">
-              {/* Monthly payment */}
+            {/* ── Right: Result ── */}
+            <div className="flex flex-col items-center justify-between gap-8">
+              {/* Monthly Payment */}
               <div className="text-center">
-                <p className="text-gray-400 text-sm uppercase tracking-widest mb-2">Monthly Payment</p>
-                <motion.div
-                  key={calc.monthly.toFixed(0)}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex items-baseline justify-center gap-1"
-                >
-                  <span className="text-5xl md:text-6xl font-bold text-white">
+                <p className="text-gray-400 text-sm font-medium mb-2">Monthly Payment</p>
+                <div className="flex items-baseline justify-center gap-1">
+                  <span className="text-5xl font-bold text-white">
                     {formatEur(calc.monthly)}
                   </span>
                   <span className="text-gray-400 text-xl">/mo</span>
-                </motion.div>
-              </div>
-
-              {/* Donut chart */}
-              <div className="flex flex-col items-center gap-4">
-                <Donut principalPct={calc.principalPct} />
-                <div className="flex items-center gap-6 text-sm">
-                  <span className="flex items-center gap-2 text-gray-400">
-                    <span className="w-3 h-3 rounded-full bg-indigo-500 inline-block" />
-                    Principal
-                  </span>
-                  <span className="flex items-center gap-2 text-gray-400">
-                    <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />
-                    Interest {(100 - calc.principalPct).toFixed(1)}%
-                  </span>
                 </div>
               </div>
 
+              {/* Donut Chart */}
+              <DonutChart principalPct={calc.principalPct} />
+
               {/* CTA */}
-              <button className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition-all duration-200 hover:scale-[1.02]">
-                Apply for This Loan
-                <ArrowRight size={18} aria-hidden="true" />
+              <button className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors text-white font-semibold rounded-xl py-4 text-sm">
+                Apply for This Loan →
               </button>
             </div>
           </div>
