@@ -1,95 +1,70 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { Sparkles, CheckCircle2 } from 'lucide-react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { Sparkles, ArrowRight, Check } from 'lucide-react'
 
-const checks = [
+const CHECKS = [
   'No credit checks to apply',
   'Cancel anytime',
   'No hidden fees',
 ]
 
 export default function CTA() {
+  const prefersReducedMotion = useReducedMotion()
+
   return (
-    <section className="relative bg-[#060b18] py-24 overflow-hidden">
-      {/* Radial gradient background glow */}
-      <div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
-        aria-hidden="true"
-      >
-        <div className="w-[640px] h-[640px] rounded-full bg-indigo-900/20 blur-[120px]" />
+    <section id="cta" className="bg-[#060b18] py-24 relative overflow-hidden">
+      {/* Radial glow */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+        <div className="w-[600px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px]" />
       </div>
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Badge */}
         <motion.div
-          className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-600/10 px-4 py-1.5 mb-8"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: prefersReducedMotion ? 0.01 : 0.6 }}
+          className="flex flex-col items-center gap-8"
         >
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-          <span className="text-indigo-300 text-xs font-medium tracking-wide">
+          {/* Badge */}
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 text-sm font-medium">
+            <Sparkles size={14} aria-hidden="true" />
             Start your journey today
           </span>
-        </motion.div>
 
-        {/* Headline */}
-        <motion.h2
-          className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Your financial freedom
-          <br />
-          <span className="text-indigo-400">starts today.</span>
-        </motion.h2>
+          {/* Headline */}
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            Your financial freedom
+            <br />
+            <span className="text-indigo-400">starts today.</span>
+          </h2>
 
-        {/* Subheading */}
-        <motion.p
-          className="text-gray-400 text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          Join 50,000+ professionals who chose smarter financing. Apply in minutes, get approved
-          instantly, and take control of your financial future.
-        </motion.p>
+          {/* Sub */}
+          <p className="text-gray-400 text-lg leading-relaxed max-w-xl">
+            Join 50,000+ professionals who chose smarter financing. Apply in minutes, get approved instantly, and take control of your financial future.
+          </p>
 
-        {/* Buttons */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <button className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 transition-colors text-white font-semibold rounded-full px-8 py-4 text-base">
-            Apply Now — It&apos;s Free
-          </button>
-          <button className="w-full sm:w-auto border border-gray-600 hover:border-gray-400 transition-colors text-white font-semibold rounded-full px-8 py-4 text-base">
-            Talk to an Expert
-          </button>
-        </motion.div>
+          {/* Buttons */}
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-all duration-200 hover:scale-[1.02]">
+              Apply Now — It&apos;s Free
+              <ArrowRight size={18} aria-hidden="true" />
+            </button>
+            <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-gray-600 text-white font-semibold text-base hover:bg-white/5 transition-all duration-200">
+              Talk to an Expert
+            </button>
+          </div>
 
-        {/* Checkmarks */}
-        <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-        >
-          {checks.map((text) => (
-            <div key={text} className="flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-              <span className="text-gray-400 text-sm">{text}</span>
-            </div>
-          ))}
+          {/* Checklist */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+            {CHECKS.map((check) => (
+              <span key={check} className="flex items-center gap-2 text-gray-400 text-sm">
+                <Check size={14} className="text-green-400 flex-shrink-0" aria-hidden="true" />
+                {check}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
