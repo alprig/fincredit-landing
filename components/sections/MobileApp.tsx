@@ -165,7 +165,7 @@ function LoanPhone() {
 // ─── Phone Shell ─────────────────────────────────────────────────────────────
 function PhoneShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative w-[185px] sm:w-[210px] flex-shrink-0">
+    <div className="relative w-[160px] sm:w-[200px] flex-shrink-0">
       <div
         className="relative overflow-hidden"
         style={{
@@ -214,7 +214,7 @@ export default function MobileApp() {
   }
 
   return (
-    <section className="relative overflow-hidden py-24 sm:py-32" style={{ backgroundColor: '#0a0e1a' }}>
+    <section className="relative overflow-hidden pt-10 pb-24 sm:pt-14 sm:pb-32" style={{ backgroundColor: '#0a0e1a' }}>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -248,7 +248,7 @@ export default function MobileApp() {
           initial={reduced ? {} : { opacity: 0, y: 32 }}
           whileInView={reduced ? {} : { opacity: 1, y: 0, transition: { duration: 0.7, ease: 'easeOut' } }}
           viewport={{ once: true, amount: 0.3 }}
-          className="flex items-end justify-center gap-5 sm:gap-8"
+          className="flex flex-row flex-nowrap items-end justify-center gap-4 sm:gap-8"
         >
           <motion.div
             animate={reduced ? {} : { y: [0, -10, 0], transition: { duration: 6, repeat: Infinity, ease: 'easeInOut' } }}
