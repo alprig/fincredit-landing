@@ -5,28 +5,37 @@ import { Plus, RefreshCw, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // ─── Line Chart SVG ──────────────────────────────────────────────────────────
+function smoothPath(pts: [number, number][]): string {
+  if (pts.length < 2) return ''
+  let d = `M ${pts[0][0]} ${pts[0][1]}`
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, y1] = pts[i]
+    const [x2, y2] = pts[i + 1]
+    const cpx = (x1 + x2) / 2
+    d += ` C ${cpx} ${y1}, ${cpx} ${y2}, ${x2} ${y2}`
+  }
+  return d
+}
+
 function LineChart() {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-  const points = [
+  const pts: [number, number][] = [
     [0, 72], [80, 60], [160, 66], [240, 44], [320, 36], [400, 20],
   ]
-  const pathD = points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ')
-  const areaD = `${pathD} L 400 90 L 0 90 Z`
+  const linePath = smoothPath(pts)
+  const areaPath = `${linePath} L 400 95 L 0 95 Z`
 
   return (
     <div className="w-full flex flex-col gap-2 mt-2">
-      <svg width="100%" viewBox="0 0 400 100" preserveAspectRatio="none" className="h-16 sm:h-20">
+      <svg width="100%" viewBox="0 0 400 100" preserveAspectRatio="none" className="h-16 sm:h-24">
         <defs>
           <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.3" />
+            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.25" />
             <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
           </linearGradient>
         </defs>
-        <path d={areaD} fill="url(#lineGrad)" />
-        <path d={pathD} stroke="#6366f1" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        {points.map(([x, y]) => (
-          <circle key={x} cx={x} cy={y} r="3.5" fill="#6366f1" />
-        ))}
+        <path d={areaPath} fill="url(#lineGrad)" />
+        <path d={linePath} stroke="#6366f1" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
       <div className="flex justify-between px-0.5">
         {months.map((m) => (
@@ -91,7 +100,10 @@ function RightPanel({ reduced }: { reduced: boolean }) {
       className="flex flex-col gap-3 w-full"
     >
       {/* VISA Card */}
-      <div className="bg-[#1a1f35] border border-white/[0.08] rounded-2xl p-5 flex flex-col gap-3 shadow-xl shadow-black/30">
+      <div
+        className="rounded-2xl p-5 flex flex-col gap-3 shadow-xl shadow-black/30"
+        style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #1a1f3c 50%, #0f172a 100%)', border: '1px solid rgba(99,102,241,0.2)' }}
+      >
         <div className="flex items-center justify-between">
           <span className="text-white font-bold text-base tracking-tight">FinCredit</span>
           <span className="text-white font-bold text-base tracking-widest">VISA</span>

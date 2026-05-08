@@ -35,8 +35,8 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group">
-            <span className="text-xl font-bold text-white tracking-tight group-hover:text-indigo-400 transition-colors">
-              Fin<span className="text-indigo-400">Credit</span>
+            <span className="text-xl font-bold text-indigo-400 tracking-tight">
+              FinCredit
             </span>
           </a>
 
