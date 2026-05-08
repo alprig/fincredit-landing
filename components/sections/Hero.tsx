@@ -1,155 +1,147 @@
 'use client'
 
 import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { Plus, RefreshCw, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ─── Sparkline SVG ──────────────────────────────────────────────────────────
-function Sparkline() {
+// ─── Line Chart SVG ──────────────────────────────────────────────────────────
+function LineChart() {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+  const points = [
+    [0, 72], [80, 60], [160, 66], [240, 44], [320, 36], [400, 20],
+  ]
+  const pathD = points.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ')
+  const areaD = `${pathD} L 400 90 L 0 90 Z`
+
   return (
-    <svg
-      width="120"
-      height="36"
-      viewBox="0 0 120 36"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <defs>
-        <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* area fill */}
-      <path
-        d="M0 28 L12 22 L24 25 L36 18 L48 20 L60 14 L72 16 L84 10 L96 8 L108 4 L120 2 L120 36 L0 36 Z"
-        fill="url(#sparkGrad)"
-      />
-      {/* line */}
-      <path
-        d="M0 28 L12 22 L24 25 L36 18 L48 20 L60 14 L72 16 L84 10 L96 8 L108 4 L120 2"
-        stroke="#6366f1"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-    </svg>
+    <div className="w-full flex flex-col gap-2 mt-2">
+      <svg width="100%" viewBox="0 0 400 100" preserveAspectRatio="none" className="h-16 sm:h-20">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#6366f1" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={areaD} fill="url(#lineGrad)" />
+        <path d={pathD} stroke="#6366f1" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        {points.map(([x, y]) => (
+          <circle key={x} cx={x} cy={y} r="3.5" fill="#6366f1" />
+        ))}
+      </svg>
+      <div className="flex justify-between px-0.5">
+        {months.map((m) => (
+          <span key={m} className="text-[10px] text-gray-500">{m}</span>
+        ))}
+      </div>
+    </div>
   )
 }
 
 // ─── Account Overview Card ───────────────────────────────────────────────────
 function AccountCard({ reduced }: { reduced: boolean }) {
-  const floatVariants: Variants = reduced
-    ? {}
-    : {
-        animate: {
-          y: [0, -8, 0],
-          transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' as const },
-        },
-      }
+  const float: Variants = reduced ? {} : {
+    animate: {
+      y: [0, -6, 0],
+      transition: { duration: 5, repeat: Infinity, ease: 'easeInOut' as const },
+    },
+  }
 
   return (
     <motion.div
-      variants={floatVariants}
+      variants={float}
       animate="animate"
-      className={cn(
-        'bg-[#111827] rounded-2xl p-5 min-w-[220px] flex flex-col gap-3',
-        'shadow-xl shadow-black/40 border border-white/5',
-      )}
+      className="bg-[#0d1117] border border-white/[0.08] rounded-2xl p-5 flex flex-col gap-3 w-full shadow-2xl shadow-black/40"
     >
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-gray-400 tracking-wide uppercase">
-          Account Overview
-        </span>
-        <span className="text-[10px] font-semibold bg-emerald-500/20 text-emerald-400 rounded-full px-2 py-0.5">
-          +2.4%
+        <span className="text-white font-semibold text-sm">Account Overview</span>
+        <span className="flex items-center gap-1.5 text-[11px] font-medium text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-full px-2.5 py-0.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          Active
         </span>
       </div>
 
       <div>
-        <p className="text-2xl font-bold text-white tracking-tight">
-          €24,850.00
-        </p>
-        <p className="text-xs text-gray-500 mt-0.5">Available balance</p>
+        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Balance</p>
+        <div className="flex items-center gap-3">
+          <span className="text-3xl font-bold text-white tracking-tight">€24,850.00</span>
+          <span className="flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-400/10 rounded-full px-2 py-0.5">
+            ↑ +12.5%
+          </span>
+        </div>
       </div>
 
-      <Sparkline />
+      <LineChart />
     </motion.div>
   )
 }
 
-// ─── Credit Card Mockup ──────────────────────────────────────────────────────
-function CreditCard({ reduced }: { reduced: boolean }) {
-  const floatVariants: Variants = reduced
-    ? {}
-    : {
-        animate: {
-          y: [0, -6, 0],
-          transition: {
-            duration: 4,
-            repeat: Infinity,
-            ease: 'easeInOut' as const,
-            delay: 1.2,
-          },
-        },
-      }
+// ─── Right Panel Card ────────────────────────────────────────────────────────
+function RightPanel({ reduced }: { reduced: boolean }) {
+  const float: Variants = reduced ? {} : {
+    animate: {
+      y: [0, -5, 0],
+      transition: { duration: 5, repeat: Infinity, ease: 'easeInOut' as const, delay: 1.5 },
+    },
+  }
 
   return (
     <motion.div
-      variants={floatVariants}
+      variants={float}
       animate="animate"
-      className={cn(
-        'rounded-2xl p-5 min-w-[220px] flex flex-col gap-3',
-        'bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700',
-        'shadow-xl shadow-indigo-900/40 border border-white/10',
-      )}
+      className="flex flex-col gap-3 w-full"
     >
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-indigo-200 tracking-widest uppercase">
-          FinCredit
-        </span>
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle cx="10" cy="14" r="9" fill="white" fillOpacity="0.35" />
-          <circle cx="18" cy="14" r="9" fill="white" fillOpacity="0.55" />
-        </svg>
-      </div>
-
-      <p className="text-sm font-mono text-white/80 tracking-widest mt-1">
-        •••• •••• •••• 4821
-      </p>
-
-      <div className="flex items-end justify-between mt-auto">
-        <div>
-          <p className="text-[10px] text-white/50 uppercase tracking-wide">
-            Card Holder
-          </p>
-          <p className="text-xs font-semibold text-white">ALEX MITCHELL</p>
+      {/* VISA Card */}
+      <div className="bg-[#1a1f35] border border-white/[0.08] rounded-2xl p-5 flex flex-col gap-3 shadow-xl shadow-black/30">
+        <div className="flex items-center justify-between">
+          <span className="text-white font-bold text-base tracking-tight">FinCredit</span>
+          <span className="text-white font-bold text-base tracking-widest">VISA</span>
         </div>
-        <div className="text-right">
-          <p className="text-[10px] text-white/50 uppercase tracking-wide">
-            Expires
-          </p>
-          <p className="text-xs font-semibold text-white">08/28</p>
+        <p className="text-gray-300 font-mono text-sm tracking-[0.25em]">•••• •••• •••• 4821</p>
+        <div className="flex items-end justify-between">
+          <div>
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider">Card Holder</p>
+            <p className="text-white text-sm font-semibold">ALEX MITCHELL</p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider">Expires</p>
+            <p className="text-white text-sm font-semibold">09/28</p>
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/10 pt-3">
-        <div>
-          <p className="text-[10px] text-white/50 uppercase tracking-wide">
-            Balance
-          </p>
-          <p className="text-sm font-bold text-white">€15,000</p>
+      {/* Stats row */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-[#0d1117] border border-white/[0.08] rounded-xl p-4">
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Credit Score</p>
+          <div className="flex items-center gap-1.5">
+            <span className="text-2xl font-bold text-emerald-400">780</span>
+            <span className="text-emerald-400 text-sm">↗</span>
+          </div>
         </div>
-        <span className="text-xs font-bold text-white/60 tracking-widest">
-          VISA
-        </span>
+        <div className="bg-[#0d1117] border border-white/[0.08] rounded-xl p-4">
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Active Loan</p>
+          <span className="text-2xl font-bold text-white">€15,000</span>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-[#0d1117] border border-white/[0.08] rounded-xl p-4">
+        <p className="text-xs text-gray-400 font-medium mb-3">Quick Actions</p>
+        <div className="grid grid-cols-3 gap-2">
+          {[
+            { icon: <Plus size={16} />, label: 'New Loan' },
+            { icon: <RefreshCw size={16} />, label: 'Repay' },
+            { icon: <FileText size={16} />, label: 'Docs' },
+          ].map(({ icon, label }) => (
+            <button
+              key={label}
+              className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-gray-400 hover:text-white transition-colors cursor-pointer"
+            >
+              {icon}
+              <span className="text-[10px] font-medium">{label}</span>
+            </button>
+          ))}
+        </div>
       </div>
     </motion.div>
   )
@@ -159,81 +151,43 @@ function CreditCard({ reduced }: { reduced: boolean }) {
 export default function Hero() {
   const reduced = useReducedMotion() ?? false
 
-  const container = {
+  const container: Variants = {
     hidden: {},
-    show: {
-      transition: {
-        staggerChildren: reduced ? 0 : 0.12,
-      },
-    },
+    show: { transition: { staggerChildren: reduced ? 0 : 0.1 } },
   }
 
   const fadeUp: Variants = {
-    hidden: reduced ? {} : { opacity: 0, y: 32 },
-    show: reduced
-      ? {}
-      : {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: 'easeOut' as const },
-        },
-  }
-
-  const fadeIn: Variants = {
-    hidden: reduced ? {} : { opacity: 0 },
-    show: reduced
-      ? {}
-      : {
-          opacity: 1,
-          transition: { duration: 0.5, ease: 'easeOut' as const },
-        },
+    hidden: reduced ? {} : { opacity: 0, y: 28 },
+    show: reduced ? {} : { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
   }
 
   return (
     <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20"
       style={{ backgroundColor: '#0a0e1a' }}
     >
-      {/* Background radial glow */}
+      {/* Radial glow */}
       <div
-        className="pointer-events-none absolute inset-0"
         aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.10) 40%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 65%)',
         }}
       />
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 py-24 flex flex-col items-center text-center">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <motion.div
           variants={container}
           initial="hidden"
           animate="show"
-          className="flex flex-col items-center gap-6"
+          className="flex flex-col items-center text-center gap-7"
         >
-          {/* Badge */}
-          <motion.div variants={fadeIn}>
-            <span
-              className={cn(
-                'inline-flex items-center gap-2 rounded-full border border-indigo-500/40',
-                'bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold text-indigo-300',
-                'tracking-wide uppercase',
-              )}
-            >
-              <span
-                className="inline-block h-1.5 w-1.5 rounded-full bg-indigo-400"
-                aria-hidden="true"
-              />
-              AI-Powered Financing
-            </span>
-          </motion.div>
-
           {/* Headline */}
           <motion.h1
             variants={fadeUp}
             className={cn(
-              'font-bold text-white leading-tight tracking-tight',
-              'text-[40px] sm:text-[56px] md:text-[64px] lg:text-[80px]',
+              'font-bold text-white leading-[1.08] tracking-tight',
+              'text-[40px] sm:text-[56px] md:text-[68px] lg:text-[80px]',
             )}
           >
             Fast financing without
@@ -241,61 +195,32 @@ export default function Hero() {
             the bank bureaucracy
           </motion.h1>
 
-          {/* Subheading */}
-          <motion.p
-            variants={fadeUp}
-            className="max-w-xl text-base sm:text-lg text-gray-400 leading-relaxed"
-          >
+          {/* Sub */}
+          <motion.p variants={fadeUp} className="max-w-xl text-base sm:text-lg text-gray-400 leading-relaxed">
             Get instant approval with flexible terms. AI-powered scoring,
             transparent rates, and funds in your account within minutes.
           </motion.p>
 
-          {/* CTA buttons */}
-          <motion.div
-            variants={fadeUp}
-            className="flex flex-col sm:flex-row items-center gap-4 mt-2"
-          >
+          {/* Buttons */}
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center gap-4">
             <a
               href="#apply"
-              className={cn(
-                'inline-flex items-center justify-center rounded-full',
-                'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800',
-                'text-white font-semibold text-sm sm:text-base',
-                'px-8 py-4 transition-colors duration-200',
-                'shadow-lg shadow-indigo-900/40',
-              )}
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-semibold text-base px-8 py-3.5 transition-all duration-200 shadow-lg shadow-indigo-900/50"
             >
               Apply Now
             </a>
             <a
               href="#calculator"
-              className={cn(
-                'inline-flex items-center justify-center rounded-full',
-                'border border-gray-600 hover:bg-white/5 active:bg-white/10',
-                'text-white font-semibold text-sm sm:text-base',
-                'px-8 py-4 transition-colors duration-200',
-              )}
+              className="inline-flex items-center justify-center rounded-full border border-gray-600 hover:bg-white/5 text-white font-semibold text-base px-8 py-3.5 transition-all duration-200"
             >
               Calculate Your Loan
             </a>
           </motion.div>
 
-          {/* Floating cards — desktop */}
-          <motion.div
-            variants={fadeUp}
-            className="hidden md:flex items-end gap-6 mt-10"
-          >
+          {/* Dashboard cards */}
+          <motion.div variants={fadeUp} className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 max-w-4xl mx-auto">
             <AccountCard reduced={reduced} />
-            <CreditCard reduced={reduced} />
-          </motion.div>
-
-          {/* Floating cards — mobile (smaller, stacked) */}
-          <motion.div
-            variants={fadeUp}
-            className="flex md:hidden flex-col items-center gap-4 mt-8 w-full max-w-xs"
-          >
-            <AccountCard reduced={reduced} />
-            <CreditCard reduced={reduced} />
+            <RightPanel reduced={reduced} />
           </motion.div>
         </motion.div>
       </div>
