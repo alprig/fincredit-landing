@@ -1,20 +1,20 @@
 const footerLinks = {
-  Product: [
-    { label: 'Personal Loans', href: '#' },
-    { label: 'Business Loans', href: '#' },
-    { label: 'Credit Lines', href: '#' },
+  Produse: [
+    { label: 'Credite Personale', href: '#' },
+    { label: 'Credite pentru Afaceri', href: '#' },
+    { label: 'Linii de Credit', href: '#' },
     { label: 'Calculator', href: '#' },
   ],
-  Company: [
-    { label: 'About Us', href: '#' },
-    { label: 'Careers', href: '#' },
+  Companie: [
+    { label: 'Despre Noi', href: '#' },
+    { label: 'Cariere', href: '#' },
     { label: 'Blog', href: '#' },
-    { label: 'Press', href: '#' },
+    { label: 'Presă', href: '#' },
   ],
   Legal: [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Cookie Policy', href: '#' },
+    { label: 'Politica de Confidențialitate', href: '#' },
+    { label: 'Termeni și Condiții', href: '#' },
+    { label: 'Politica Cookie', href: '#' },
     { label: 'GDPR', href: '#' },
   ],
 }
@@ -72,7 +72,7 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-sm text-gray-400 leading-relaxed max-w-xs">
-              Modern financing for modern people. Fast, transparent, and built for the digital age.
+              Finanțare modernă pentru oameni moderni. Rapidă, transparentă și construită pentru era digitală.
             </p>
             {/* Social Icons */}
             <div className="flex items-center gap-4">
@@ -114,10 +114,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500 text-center sm:text-left">
-            &copy; 2026 FinCredit. All rights reserved.
+            &copy; 2026 FinCredit. Toate drepturile rezervate.
           </p>
           <p className="text-xs text-gray-600 text-center sm:text-right max-w-sm">
-            Licenced and regulated by the European Central Bank.
+            Licențiat și reglementat de Banca Centrală Europeană.
           </p>
         </div>
       </div>

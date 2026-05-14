@@ -4,9 +4,9 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Sparkles, ArrowRight, Check } from 'lucide-react'
 
 const CHECKS = [
-  'No credit checks to apply',
-  'Cancel anytime',
-  'No hidden fees',
+  'Fără verificare de credit',
+  'Anulați oricând',
+  'Fără taxe ascunse',
 ]
 
 export default function CTA() {
@@ -30,29 +30,32 @@ export default function CTA() {
           {/* Badge */}
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 text-sm font-medium">
             <Sparkles size={14} aria-hidden="true" />
-            Start your journey today
+            Începeți călătoria astăzi
           </span>
 
           {/* Headline */}
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-            Your financial freedom
+            Libertatea ta financiară
             <br />
-            <span className="text-indigo-400">starts today.</span>
+            <span className="text-indigo-400">începe astăzi.</span>
           </h2>
 
           {/* Sub */}
           <p className="text-gray-400 text-lg leading-relaxed max-w-xl">
-            Join 50,000+ professionals who chose smarter financing. Apply in minutes, get approved instantly, and take control of your financial future.
+            Alăturați-vă celor 50.000+ profesioniști care au ales o finanțare mai inteligentă. Aplicați în minute, primiți aprobare instantanee și preluați controlul viitorului dvs. financiar.
           </p>
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-all duration-200 hover:scale-[1.02]">
-              Apply Now — It&apos;s Free
+            <button
+              onClick={() => window.dispatchEvent(new Event('openApplyModal'))}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-base transition-all duration-200 hover:scale-[1.02] cursor-pointer"
+            >
+              Aplică Acum — Gratuit
               <ArrowRight size={18} aria-hidden="true" />
             </button>
             <button className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-gray-600 text-white font-semibold text-base hover:bg-white/5 transition-all duration-200">
-              Talk to an Expert
+              Vorbiți cu un Expert
             </button>
           </div>
 

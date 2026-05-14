@@ -4,10 +4,10 @@ import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 
 const navLinks = [
-  { label: 'Products', href: '#products' },
-  { label: 'Solutions', href: '#solutions' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'About', href: '#about' },
+  { label: 'Produse', href: '#products' },
+  { label: 'Soluții', href: '#solutions' },
+  { label: 'Tarife', href: '#pricing' },
+  { label: 'Despre', href: '#about' },
 ]
 
 export default function Header() {
@@ -55,11 +55,8 @@ export default function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button variant="primary" size="sm">
-              Get Started
+            <Button variant="primary" size="sm" onClick={() => window.dispatchEvent(new Event('openApplyModal'))}>
+              Începe Acum
             </Button>
           </div>
 
@@ -104,11 +101,8 @@ export default function Header() {
               </a>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/8">
-              <Button variant="ghost" size="sm" className="justify-center">
-                Sign In
-              </Button>
-              <Button variant="primary" size="sm" className="justify-center">
-                Get Started
+              <Button variant="primary" size="sm" className="justify-center" onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event('openApplyModal')) }}>
+                Începe Acum
               </Button>
             </div>
           </div>

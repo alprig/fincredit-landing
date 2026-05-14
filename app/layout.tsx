@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "FinCredit — Fast Financing Without Bank Bureaucracy",
-  description: "Get instant approval with flexible terms. AI-powered scoring, transparent rates, and funds in your account within minutes.",
+  title: "FinCredit — Finanțare Rapidă Fără Birocrație Bancară",
+  description: "Obțineți aprobare instantanee cu termeni flexibili. Scorare AI, rate transparente și fonduri în cont în câteva minute.",
 };
 
 export default function RootLayout({

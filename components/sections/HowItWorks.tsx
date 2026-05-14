@@ -7,20 +7,20 @@ const STEPS = [
   {
     number: '01',
     icon: <FileText size={22} aria-hidden="true" />,
-    title: 'Fill Your Application',
-    description: 'Complete our simple online form in under 2 minutes.',
+    title: 'Completează Cererea',
+    description: 'Completați formularul nostru simplu online în mai puțin de 2 minute.',
   },
   {
     number: '02',
     icon: <Cpu size={22} aria-hidden="true" />,
-    title: 'AI Verification',
-    description: 'Our algorithms verify and approve your application instantly.',
+    title: 'Verificare AI',
+    description: 'Algoritmii noștri verifică și aprobă cererea dvs. instantaneu.',
   },
   {
     number: '03',
     icon: <Banknote size={22} aria-hidden="true" />,
-    title: 'Receive Your Funds',
-    description: 'Money transferred directly to your bank account within hours.',
+    title: 'Primiți Fondurile',
+    description: 'Banii transferați direct în contul dvs. bancar în câteva ore.',
   },
 ]
 
@@ -38,17 +38,17 @@ export default function HowItWorks() {
           className="flex flex-col items-center text-center gap-4 mb-16"
         >
           <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
-            HOW IT WORKS
+            CUM FUNCȚIONEAZĂ
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-            Three simple steps
+            Trei pași simpli
           </h2>
           <p className="text-gray-400 text-lg max-w-xl">
-            From application to funds in your account — fast, simple, secure.
+            De la cerere la fonduri în cont — rapid, simplu, sigur.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
           {/* Connecting line */}
           <div className="hidden md:block absolute top-10 left-[calc(16.67%+2rem)] right-[calc(16.67%+2rem)] h-px border-t border-dashed border-white/10" />
 
@@ -59,15 +59,15 @@ export default function HowItWorks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: prefersReducedMotion ? 0.01 : 0.5, delay: prefersReducedMotion ? 0 : i * 0.12 }}
-              className="flex flex-col items-center text-center px-6 relative"
+              className="flex flex-col items-center text-center px-4 relative bg-[#0d1117] border border-white/[0.07] rounded-2xl py-10"
             >
               {/* Number */}
-              <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-8xl font-black text-indigo-600/10 select-none pointer-events-none leading-none">
+              <span className="text-5xl font-black bg-gradient-to-b from-indigo-400 to-violet-500 bg-clip-text text-transparent mb-5 leading-none select-none">
                 {step.number}
               </span>
 
               {/* Icon circle */}
-              <div className="relative z-10 w-20 h-20 rounded-full bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6 mt-4">
+              <div className="w-16 h-16 rounded-full bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-5">
                 {step.icon}
               </div>
 

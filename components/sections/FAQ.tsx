@@ -6,34 +6,34 @@ import { Plus, Minus } from 'lucide-react'
 
 const faqs = [
   {
-    question: 'What are the eligibility requirements?',
+    question: 'Care sunt condițiile de eligibilitate?',
     answer:
-      'You must be at least 18 years old, a resident of the EU, and have a valid ID. We accept applications from employed, self-employed, and business owners with a minimum monthly income of €1,000.',
+      'Trebuie să aveți cel puțin 18 ani, să fiți rezident UE și să dețineți un act de identitate valabil. Acceptăm cereri de la angajați, persoane fizice autorizate și proprietari de afaceri cu un venit lunar minim de €1.000.',
   },
   {
-    question: 'How fast can I receive my funds?',
+    question: 'Cât de repede pot primi fondurile?',
     answer:
-      'Most approved loans are funded within 2 hours. Our AI verification completes in under 7 minutes, and once approved, the transfer is initiated immediately to your bank account.',
+      'Majoritatea creditelor aprobate sunt finanțate în 2 ore. Verificarea AI se finalizează în mai puțin de 7 minute, iar odată aprobat, transferul este inițiat imediat în contul dvs. bancar.',
   },
   {
-    question: 'What interest rates do you offer?',
+    question: 'Ce rate ale dobânzii oferiți?',
     answer:
-      'Our rates start from 3.9% APR depending on your credit profile, loan amount, and loan term. You can use our calculator to see your personalized rate before applying.',
+      'Ratele noastre pornesc de la 3,9% DAE în funcție de profilul dvs. de credit, suma și termenul creditului. Puteți folosi calculatorul nostru pentru a vedea rata personalizată înainte de a aplica.',
   },
   {
-    question: 'Is my data secure?',
+    question: 'Datele mele sunt în siguranță?',
     answer:
-      'Absolutely. We use bank-grade 256-bit AES encryption, are PCI DSS Level 1 compliant, and ISO 27001 certified. We never share your information with third parties without your explicit consent.',
+      'Absolut. Folosim criptare AES pe 256 de biți de nivel bancar, suntem conformi PCI DSS Nivel 1 și certificați ISO 27001. Nu împărtășim niciodată informațiile dvs. cu terți fără consimțământul dvs. explicit.',
   },
   {
-    question: 'Can I repay my loan early?',
+    question: 'Pot rambursa creditul înainte de termen?',
     answer:
-      'Yes, you can repay your loan at any time with zero prepayment penalties. We believe in flexibility — partial early repayments are also accepted, and you\'ll only pay interest on the remaining balance.',
+      'Da, puteți rambursa creditul oricând fără penalități de rambursare anticipată. Credem în flexibilitate — rambursările parțiale anticipate sunt de asemenea acceptate și veți plăti dobândă doar pe soldul rămas.',
   },
   {
-    question: 'What documents do I need to apply?',
+    question: 'Ce documente am nevoie pentru a aplica?',
     answer:
-      'Just a government-issued ID and proof of income (bank statements or pay stubs from the last 3 months). Our AI system can often verify your identity and income automatically, making the process even faster.',
+      'Doar un act de identitate emis de stat și dovada veniturilor (extrase bancare sau fluturași de salariu din ultimele 3 luni). Sistemul nostru AI poate verifica adesea automat identitatea și venitul, accelerând și mai mult procesul.',
   },
 ]
 
@@ -49,11 +49,10 @@ export default function FAQ() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Frequently asked questions
+            Întrebări frecvente
           </h2>
           <p className="text-gray-400 max-w-xl mx-auto leading-relaxed">
-            Everything you need to know about FinCredit. Can&apos;t find what
-            you&apos;re looking for? Contact our support team.
+            Tot ce trebuie să știți despre FinCredit. Nu găsiți ce căutați? Contactați echipa noastră de suport.
           </p>
         </div>
 

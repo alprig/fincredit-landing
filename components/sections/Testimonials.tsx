@@ -14,31 +14,31 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     name: 'Maria Kowalski',
-    role: 'Freelance Designer, Warsaw',
-    quote: 'FinCredit approved my loan in under 15 minutes. The entire process was seamless — no paperwork, no branch visits. I had the funds in my account the same day.',
+    role: 'Designer Freelance, Varșovia',
+    quote: 'FinCredit mi-a aprobat creditul în mai puțin de 15 minute. Întregul proces a fost fără probleme — fără acte, fără vizite la sucursală. Fondurile erau în cont în aceeași zi.',
     initials: 'MK',
     color: 'bg-violet-600',
   },
   {
     name: 'Alex Thompson',
-    role: 'Business Owner, London',
-    quote: "As an entrepreneur, I needed capital for my startup. Traditional banks took weeks. FinCredit? Done in one afternoon. The AI scoring actually understood my business potential.",
+    role: 'Antreprenor, Londra',
+    quote: 'Ca antreprenor, aveam nevoie de capital pentru startup-ul meu. Băncile tradiționale au durau săptămâni. FinCredit? Gata într-o după-amiază. Scorarea AI a înțeles cu adevărat potențialul meu.',
     initials: 'AT',
     color: 'bg-indigo-600',
   },
   {
     name: 'Sophie Laurent',
-    role: 'Marketing Director, Paris',
-    quote: "I was skeptical about online lending, but FinCredit changed my mind completely. The transparency is unmatched — I knew exactly what I was paying from day one.",
+    role: 'Director de Marketing, Paris',
+    quote: 'Eram sceptică față de împrumuturile online, dar FinCredit mi-a schimbat complet opinia. Transparența este inegalabilă — știam exact cât plătesc din prima zi.',
     initials: 'SL',
     color: 'bg-blue-600',
   },
 ]
 
 const SOCIAL_PROOF = [
-  { value: '4.9/5', label: 'on TrustPilot' },
-  { value: '2,400+', label: 'on-site reviews' },
-  { value: 'NPS 76', label: 'Industry-leading' },
+  { value: '4.9/5', label: 'pe TrustPilot' },
+  { value: '2.400+', label: 'recenzii pe site' },
+  { value: 'NPS 76', label: 'Lider în industrie' },
 ]
 
 export default function Testimonials() {
@@ -55,13 +55,13 @@ export default function Testimonials() {
           className="flex flex-col items-center text-center gap-4 mb-14"
         >
           <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gray-400">
-            WHAT OUR CLIENTS SAY
+            CE SPUN CLIENȚII NOȘTRI
           </span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-            Trusted by thousands of professionals
+            De încredere pentru mii de profesioniști
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl">
-            Real stories from real people who transformed their financial lives with FinCredit.
+            Povești reale de la oameni reali care și-au transformat viața financiară cu FinCredit.
           </p>
         </motion.div>
 

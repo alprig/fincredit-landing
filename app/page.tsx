@@ -9,6 +9,7 @@ import Testimonials from '@/components/sections/Testimonials'
 import MobileApp from '@/components/sections/MobileApp'
 import FAQ from '@/components/sections/FAQ'
 import CTA from '@/components/sections/CTA'
+import ApplyModal from '@/components/ui/ApplyModal'
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <CTA />
       </main>
       <Footer />
+      <ApplyModal />
     </>
   )
 }

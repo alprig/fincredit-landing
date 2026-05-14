@@ -3,18 +3,18 @@
 import { motion } from 'framer-motion'
 
 const stats = [
-  { value: '50,000+', label: 'Approved Clients' },
-  { value: '€120M', label: 'Total Financed' },
-  { value: '7 min', label: 'Average Approval Time' },
+  { value: '50,000+', label: 'Clienți Aprobați' },
+  { value: '€120M', label: 'Total Finanțat' },
+  { value: '7 min', label: 'Timp Mediu de Aprobare' },
 ]
 
 const trustLogos = ['VISA', 'Mastercard', 'SWIFT', 'BCE', 'TrustPilot', 'ISO 27001']
 
 const badges = [
-  { icon: '🔒', text: 'Bank-grade encryption' },
+  { icon: '🔒', text: 'Criptare bancară' },
   { icon: '🔑', text: '256-bit SSL' },
-  { icon: '✓', text: 'PCI DSS Compliant' },
-  { icon: '🇪🇺', text: 'EU Licensed' },
+  { icon: '✓', text: 'Conform PCI DSS' },
+  { icon: '🇪🇺', text: 'Licențiat UE' },
 ]
 
 export default function Stats() {
@@ -51,7 +51,7 @@ export default function Stats() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <p className="text-gray-500 text-xs uppercase tracking-widest">
-            Trusted by leading institutions
+            De încredere pentru instituții de top
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {trustLogos.map((logo) => (

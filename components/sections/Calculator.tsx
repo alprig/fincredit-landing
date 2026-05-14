@@ -108,7 +108,7 @@ function DonutChart({ principalPct }: DonutChartProps) {
         </div>
         <div className="flex items-center gap-2">
           <span className="w-3 h-3 rounded-full bg-gray-600 inline-block" />
-          <span className="text-gray-300">Interest {interestPct.toFixed(1)}%</span>
+          <span className="text-gray-300">Dobândă {interestPct.toFixed(1)}%</span>
         </div>
       </div>
     </div>
@@ -123,6 +123,8 @@ type Term = (typeof TERM_OPTIONS)[number]
 export default function Calculator() {
   const [amount, setAmount] = useState(15000)
   const [term, setTerm] = useState<Term>(24)
+
+  const sliderPct = ((amount - 1000) / (50000 - 1000)) * 100
 
   const calc = useMemo(() => {
     const rate = 0.03 / 12 // 3% annual, monthly
@@ -155,13 +157,13 @@ export default function Calculator() {
         {/* Section header */}
         <div className="text-center mb-12">
           <p className="text-indigo-400 text-xs font-semibold tracking-widest uppercase mb-3">
-            LOAN CALCULATOR
+            CALCULATOR CREDIT
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-            Calculate your loan
+            Calculează creditul tău
           </h2>
           <p className="text-gray-400 max-w-xl mx-auto">
-            See exactly what you&apos;ll pay — no surprises, no hidden charges.
+            Vedeți exact cât veți plăti — fără surprize, fără taxe ascunse.
           </p>
         </div>
 
@@ -183,37 +185,46 @@ export default function Calculator() {
                     htmlFor="loan-amount"
                     className="text-gray-400 text-sm font-medium"
                   >
-                    Loan Amount
+                    Suma Creditului
                   </label>
                   <span className="text-white text-2xl font-bold">
                     {formatEur(amount)}
                   </span>
                 </div>
 
-                <input
-                  id="loan-amount"
-                  type="range"
-                  min={1000}
-                  max={50000}
-                  step={500}
-                  value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer
-                    bg-gradient-to-r from-indigo-600 to-indigo-400
-                    [&::-webkit-slider-thumb]:appearance-none
-                    [&::-webkit-slider-thumb]:w-5
-                    [&::-webkit-slider-thumb]:h-5
-                    [&::-webkit-slider-thumb]:rounded-full
-                    [&::-webkit-slider-thumb]:bg-white
-                    [&::-webkit-slider-thumb]:shadow-lg
-                    [&::-webkit-slider-thumb]:cursor-pointer
-                    [&::-moz-range-thumb]:w-5
-                    [&::-moz-range-thumb]:h-5
-                    [&::-moz-range-thumb]:rounded-full
-                    [&::-moz-range-thumb]:bg-white
-                    [&::-moz-range-thumb]:border-0
-                    [&::-moz-range-thumb]:cursor-pointer"
-                />
+                <div className="relative flex items-center h-5">
+                  {/* Track */}
+                  <div className="absolute inset-x-0 h-2 rounded-full overflow-hidden pointer-events-none">
+                    <div
+                      className="h-full rounded-full"
+                      style={{ background: `linear-gradient(to right, #6366f1 0%, #818cf8 ${sliderPct}%, #1e2a45 ${sliderPct}%, #1e2a45 100%)` }}
+                    />
+                  </div>
+                  {/* Thumb input */}
+                  <input
+                    id="loan-amount"
+                    type="range"
+                    min={1000}
+                    max={50000}
+                    step={500}
+                    value={amount}
+                    onChange={(e) => setAmount(Number(e.target.value))}
+                    className="relative w-full appearance-none bg-transparent cursor-pointer
+                      [&::-webkit-slider-thumb]:appearance-none
+                      [&::-webkit-slider-thumb]:w-5
+                      [&::-webkit-slider-thumb]:h-5
+                      [&::-webkit-slider-thumb]:rounded-full
+                      [&::-webkit-slider-thumb]:bg-white
+                      [&::-webkit-slider-thumb]:shadow-md
+                      [&::-webkit-slider-thumb]:cursor-pointer
+                      [&::-moz-range-thumb]:w-5
+                      [&::-moz-range-thumb]:h-5
+                      [&::-moz-range-thumb]:rounded-full
+                      [&::-moz-range-thumb]:bg-white
+                      [&::-moz-range-thumb]:border-0
+                      [&::-moz-range-thumb]:cursor-pointer"
+                  />
+                </div>
 
                 <div className="flex justify-between text-xs text-gray-500 mt-2">
                   <span>€1,000</span>
@@ -223,7 +234,7 @@ export default function Calculator() {
 
               {/* Loan Period */}
               <div>
-                <p className="text-gray-400 text-sm font-medium mb-3">Loan Period</p>
+                <p className="text-gray-400 text-sm font-medium mb-3">Perioada Creditului</p>
                 <div className="flex flex-wrap gap-2">
                   {TERM_OPTIONS.map((t) => (
                     <button
@@ -244,10 +255,10 @@ export default function Calculator() {
               {/* Breakdown Table */}
               <div className="border-t border-white/[0.08] pt-6 flex flex-col gap-3">
                 {[
-                  { label: 'Principal Amount', value: formatEur(amount) },
-                  { label: 'Interest Rate', value: '3.00%' },
-                  { label: 'Total Interest', value: formatEur(calc.totalInterest) },
-                  { label: 'Total Repayment', value: formatEur(calc.totalRepayment) },
+                  { label: 'Suma Principală', value: formatEur(amount) },
+                  { label: 'Rata Dobânzii', value: '3.00%' },
+                  { label: 'Dobândă Totală', value: formatEur(calc.totalInterest) },
+                  { label: 'Total de Rambursat', value: formatEur(calc.totalRepayment) },
                 ].map(({ label, value }) => (
                   <div key={label} className="flex justify-between">
                     <span className="text-gray-400 text-sm">{label}</span>
@@ -261,12 +272,12 @@ export default function Calculator() {
             <div className="flex flex-col items-center justify-between gap-8">
               {/* Monthly Payment */}
               <div className="text-center">
-                <p className="text-gray-400 text-sm font-medium mb-2">Monthly Payment</p>
+                <p className="text-gray-400 text-sm font-medium mb-2">Plată Lunară</p>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-5xl font-bold text-white">
                     {formatEur(calc.monthly)}
                   </span>
-                  <span className="text-gray-400 text-xl">/mo</span>
+                  <span className="text-gray-400 text-xl">/lună</span>
                 </div>
               </div>
 
@@ -275,7 +286,7 @@ export default function Calculator() {
 
               {/* CTA */}
               <button className="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors text-white font-semibold rounded-xl py-4 text-sm">
-                Apply for This Loan →
+                Aplică pentru Acest Credit →
               </button>
             </div>
           </div>
